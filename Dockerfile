@@ -1,9 +1,13 @@
 FROM golang:1.12
 
-WORKDIR /go/src/app
+WORKDIR /build
 COPY . .
 
-RUN go get -d -v ./...
-RUN go install -v ./...
+ENV GO111MODULES=on
+RUN go build .
 
-CMD ['app']
+FROM alpine:latest
+WORKDIR /srv
+COPY --from=0 /build/iasipbot_mastodon .
+
+CMD ['./iasipbot_mastodon']
