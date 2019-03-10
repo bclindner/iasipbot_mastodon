@@ -4,10 +4,8 @@ WORKDIR /build
 COPY . .
 
 ENV GO111MODULES=on
-RUN go build .
+RUN go install .
 
-FROM alpine:latest
 WORKDIR /srv
-COPY --from=0 /build/iasipbot_mastodon .
 
-CMD ['./iasipbot_mastodon']
+ENTRYPOINT ["iasipbot_mastodon"]
