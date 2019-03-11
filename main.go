@@ -16,12 +16,6 @@ import (
 )
 
 // iasipbot should only respond to a message if it and only it is directly mentioned before any non-mention text.
-// examples:
-// - if a user tags 5 accounts at the very start of the message and
-// iasipbot is one of them, then it will trigger the generator
-// - if a user tags X accounts but iasipbot is mentioned after any
-// initial tags, then iasipbot will not trigger (making the assumption
-// that the bot is merely being discussed)
 //
 // in proper tryhard fashion, i wrote a dumb and probably naive regex
 // to do all of that, because why not

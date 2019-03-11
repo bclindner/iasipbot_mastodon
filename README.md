@@ -31,8 +31,8 @@ credentials:
 	"fontPath": "<PATH_TO_YOUR_TEXTILE_TTF>",
 	"credentials": {
 		"server": "https://<YOUR_BOT_DOMAIN>",
-		"clientID": "<YOUR_BOT_CLIENT_TOKEN",
-		"clientSecret": "<YOUR_BOT_CLIENT_SECRET",
+		"clientID": "<YOUR_BOT_CLIENT_TOKEN>",
+		"clientSecret": "<YOUR_BOT_CLIENT_SECRET>",
 		"accessToken": "<YOUR_BOT_ACCESS_TOKEN>"
 	}
 }
