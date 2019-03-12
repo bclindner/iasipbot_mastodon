@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"strings"
 	"fmt"
+	"io"
 )
 
 // iasipbot should only respond to a message if it and only it is directly mentioned before any non-mention text.
@@ -116,29 +117,20 @@ func main() {
 					fmt.Printf("Failed to make IASIP for message by %s:\n\n%s\n\nError: %s\n", status.Account.Acct, content, err)
 					break
 				}
-				/*
-					this next block is a little silly - i have to make a temp file and
-					write the JPEG to it since there is no way to upload media directly
-					from an io.Reader interface or similar in go-mastodon. maybe I should
-					raise a github issue about that.
-				*/
-				// create temp file and write the IASIP to it as a jpeg
-				tmpfile, err := ioutil.TempFile("", "iasipbot_*.jpg")
-				if err != nil {
-					fmt.Printf("Failed to create temp file for message by %s:\n\n%s\n\nError: %s\n", status.Account.Acct, content, err)
-					break
-				}
-				defer tmpfile.Close()
+				pr, pw := io.Pipe()
 				// encode the jpeg to the tempfile
-				err = jpeg.Encode(tmpfile, img, &jpeg.Options{
-					Quality: 100,
-				})
-				if err != nil {
-					fmt.Printf("Failed to encode image for message by %s:\n\n%s\n\nError: %s\n", status.Account.Acct, content, err)
-					break
-				}
+				go func() {
+					defer pw.Close()
+					err = jpeg.Encode(pw, img, &jpeg.Options{
+						Quality: 100,
+					})
+					if err != nil {
+						fmt.Printf("Failed to encode image for message by %s:\n\n%s\n\nError: %s\n", status.Account.Acct, content, err)
+						pw.CloseWithError(err)
+					}
+				}()
 				// upload the temp file
-				attach, err := client.UploadMedia(ctx, tmpfile.Name())
+				attach, err := client.UploadMediaFromReader(ctx, pr)
 				if err != nil {
 					fmt.Printf("Failed to upload image for message by %s:\n\n%s\n\nError: %s\n", status.Account.Acct, content, err)
 					break
