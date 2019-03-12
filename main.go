@@ -6,7 +6,7 @@ import (
 	"github.com/bclindner/iasipgenerator/iasipgen"
 	"github.com/microcosm-cc/bluemonday"
 	"html"
-	"github.com/bclindner/go-mastodon"
+	"github.com/mattn/go-mastodon"
 	"image/jpeg"
 	"io/ioutil"
 	"os"
