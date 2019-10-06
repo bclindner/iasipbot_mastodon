@@ -7,4 +7,4 @@ RUN go install .
 
 WORKDIR /data
 
-ENTRYPOINT ["iasipbot_mastodon"]
+CMD ["iasipbot_mastodon"]
