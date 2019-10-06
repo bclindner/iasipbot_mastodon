@@ -3,9 +3,8 @@ FROM golang:1.13
 WORKDIR /build
 COPY . .
 
-ENV GO111MODULES=on
 RUN go install .
 
-WORKDIR /srv
+WORKDIR /data
 
 ENTRYPOINT ["iasipbot_mastodon"]
